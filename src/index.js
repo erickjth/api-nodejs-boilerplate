@@ -5,8 +5,6 @@ const createServer = require('./interfaces/http/server');
 async function start() {
 	const server = await createServer(container);
 
-	const logger = container.resolve('logger');
-
 	server.addHook('onClose', (instance, done) => {
 		container.dispose().then(done);
 	});
@@ -21,7 +19,7 @@ async function start() {
 		});
 
 	process.on('unhandledRejection', (reason, p) =>
-		logger.error('Unhandled Rejection at: Promise ', p, reason)
+		console.error('Unhandled Rejection at: Promise ', p, reason)
 	);
 }
 

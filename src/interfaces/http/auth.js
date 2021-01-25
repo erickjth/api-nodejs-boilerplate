@@ -4,7 +4,6 @@ const ApiError = require('./errors/api-error');
 
 module.exports = fp((instance, opts, done) => {
 	const jwtStrategy = instance.container.resolve('jwtStrategy');
-	const oklaStrategy = instance.container.resolve('oklaStrategy');
 	const config = instance.container.resolve('config');
 
 	instance.register(require('fastify-jwt'), {
@@ -20,21 +19,22 @@ module.exports = fp((instance, opts, done) => {
 		}
 	});
 
-	instance.decorate('authenticate-with-okta', async function (request, reply) {
-		try {
-			const { authorization } = request.headers;
+	// const oklaStrategy = instance.container.resolve('oktaStrategy');
+	// instance.decorate('authenticate-with-okta', async function (request, reply) {
+	// 	try {
+	// 		const { authorization } = request.headers;
 
-			if (!authorization) {
-				throw new Error('Missing Token');
-			}
+	// 		if (!authorization) {
+	// 			throw new Error('Missing Token');
+	// 		}
 
-			const [, token] = authorization.trim().split(' ');
+	// 		const [, token] = authorization.trim().split(' ');
 
-			await oklaStrategy.verify(token);
-		} catch (err) {
-			throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
-		}
-	});
+	// 		await oklaStrategy.verify(token);
+	// 	} catch (err) {
+	// 		throw new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized');
+	// 	}
+	// });
 
 	done();
 });

@@ -1,6 +1,5 @@
 const { createContainer, InjectionMode, asFunction, asValue, Lifetime } = require('awilix');
 const config = require('../config');
-const logger = require('./infra/logger');
 const database = require('./infra/database');
 
 const container = createContainer({
@@ -9,7 +8,6 @@ const container = createContainer({
 
 container.register({
 	config: asValue(config),
-	logger: asFunction(logger).singleton(),
 	database: asFunction(database).singleton(),
 });
 
