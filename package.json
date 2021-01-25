@@ -26,8 +26,7 @@
     "knex-stringcase": "^1.4.3",
     "middie": "^5.2.0",
     "mysql2": "^2.2.5",
-    "objection": "^2.2.4",
-    "winston": "^3.0.0"
+    "objection": "^2.2.4"
   },
   "devDependencies": {
     "eslint": "^7.17.0",
