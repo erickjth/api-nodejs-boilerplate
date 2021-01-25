@@ -9,11 +9,11 @@ module.exports = function AuthController({ jwtStrategy }) {
 				request.body.password
 			);
 
-			reply.jwtSign({ id: user.id }, function (err, token) {
-				return reply.send(err || {
-					token: token,
-					data: user
-				});
+			const token = await reply.jwtSign({ id: user.id });
+
+			return reply.send({
+				token: token,
+				data: user
 			});
 		} catch (err) {
 			throw new ApiError(httpStatus.UNAUTHORIZED, 'Authentication failed');

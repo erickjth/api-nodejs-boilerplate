@@ -4,11 +4,18 @@ const fp = require('fastify-plugin');
 module.exports = async function createServer(container) {
 	const config = container.resolve('config');
 
-	const { api, logger } = config;
+	const {
+		api,
+		logger: {
+			enabled: loggerEnabled,
+			...loggerOpts
+		} } = config;
 
 	const application = fastify({
-		logger: logger.enabled,
-		file: logger.file,
+		logger: loggerEnabled ? {
+			level: 'info',
+			...loggerOpts
+		} : false
 	});
 
 	application.register(fp((instance, opts, done) => {

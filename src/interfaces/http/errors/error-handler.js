@@ -11,6 +11,8 @@ module.exports = function errorHandler(incomingError, request, reply) {
 		);
 	}
 
+	request.log.error(error.message);
+
 	// Send error response
 	reply.status(error.statusCode).send({
 		message: error.message,

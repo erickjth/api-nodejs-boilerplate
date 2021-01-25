@@ -23,7 +23,9 @@ module.exports = {
 		}
 	},
 	logger: {
-		enabled: process.env.NODE_ENV == 'production',
-		file: __dirname + '/logs'
+		enabled: true,
+		...(process.env.NODE_ENV === 'production' ?
+			{ file: __dirname + '/../logs/api' } :
+			{}),
 	}
 };
