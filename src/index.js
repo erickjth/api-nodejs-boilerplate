@@ -1,30 +1,27 @@
-require('dotenv-safe').config({
-	allowEmptyValues: true
-});
-
+require('dotenv-safe').config({ allowEmptyValues: true });
 const container = require('./container');
-const { createHttpServer } = require('./server');
+const createServer = require('./interfaces/http/server');
 
 async function start() {
-	const server = await createHttpServer(container);
+	const server = await createServer(container);
 
-	const port = container.get('config').api.port;
+	const logger = container.resolve('logger');
 
-	// Run the server!
-	server.listen(port, function (err, address) {
-		if (err) {
-			server.log.error(err)
-			process.exit(1)
-		}
-		server.log.info(`server listening on ${address}`)
-	})
+	server.addHook('onClose', (instance, done) => {
+		container.dispose().then(done);
+	});
+
+	await server.start()
+		.then((address) => server.log.info(`server listening on ${address}`))
+		.catch(err => {
+			if (err) {
+				server.log.error(err);
+				process.exit(1);
+			}
+		});
 
 	process.on('unhandledRejection', (reason, p) =>
-		server.log.error('Unhandled Rejection at: Promise ', p, reason)
-	);
-
-	server.on('listening', () =>
-		server.log.info('Feathers application started on http://%s:%d', server.get('host'), port)
+		logger.error('Unhandled Rejection at: Promise ', p, reason)
 	);
 }
 
